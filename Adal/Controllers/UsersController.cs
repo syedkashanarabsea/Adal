@@ -94,6 +94,9 @@ namespace Adal.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            var getCity = _context.City.ToList();
+            users.CityList.AddRange(getCity);
             return View(users);
         }
 
