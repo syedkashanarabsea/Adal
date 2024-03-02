@@ -1,0 +1,100 @@
+﻿@model Core.CoreClass.Users
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create New User</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email:</label>
+                <input asp-for="Email" class="form-control" required />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="FirstName" class="control-label">First Name:</label>
+                    <input asp-for="FirstName" class="form-control" required />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="LastName" class="control-label">Last Name:</label>
+                    <input asp-for="LastName" class="form-control" required />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label">Date of Birth:</label>
+                <input asp-for="DateOfBirth" class="form-control" required />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Contact" class="control-label">Contact:</label>
+                <input asp-for="Contact" class="form-control" />
+                <span asp-validation-for="Contact" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CNIC" class="control-label">CNIC:</label>
+                <input asp-for="CNIC" class="form-control" required />
+                <span asp-validation-for="CNIC" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserType" class="control-label">User Type:</label>
+                <input asp-for="UserType" class="form-control" />
+                <span asp-validation-for="UserType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Active" class="control-label">Active:</label>
+                <input asp-for="Active" class="form-control" />
+                <span asp-validation-for="Active" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label">Address:</label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Password:</label>
+                <input asp-for="Password" class="form-control" required />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label">Confirm Password:</label>
+                <input asp-for="ConfirmPassword" class="form-control" required />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-row">
+
+                <div class="dropdown">
+                    @Html.DropDownListFor(model => model.CityId, new SelectList(Model.CityList, "Id", "Name"), "Select", new { @class = "btn btn-secondary dropdown-toggle", id = "dropdownMenuButton1", data_bs_toggle = "dropdown", aria_expanded = "false" })
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="UserRoleId" class="control-label">User Role ID:</label>
+                    <input asp-for="UserRoleId" class="form-control" />
+                    <span asp-validation-for="UserRoleId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
