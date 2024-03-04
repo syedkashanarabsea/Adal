@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Core.CoreClass
 {
-    public class Rating
+    public class MediaGalleryDTO
     {
         public int Id { get; set; }
-        public int LawyerId { get; set; }
-        public int ClientId { get; set; }
         public int CaseId { get; set; }
-        public int? Rate { get; set; }
-        public string Comments { get; set; }
+        public int UserId { get; set; }
+        public string Name { get; set; }
+        public string FileType { get; set; }
+        public string FilePath { get; set; }
         public DateTime CreatedOnUTC { get; set; }
     }
 }

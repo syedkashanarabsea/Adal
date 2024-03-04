@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace Core.CoreClass
 {
-    public class Users
+    public class UsersDTO
     {
-        public Users() 
+        public UsersDTO()
         {
             //List<City> cities = new List<City>();
             CityList = new List<City>();
+			LawyerTypeList = new List<LawyerTypesClass>();
         }
         public int Id { get; set; }
 
@@ -41,6 +42,7 @@ namespace Core.CoreClass
         [StringLength(13, ErrorMessage = "Name length can't be more than 13.")]
         public string? CNIC { get; set; }
         public int? UserType { get; set; }
+        public string? UserTypeName { get; set; }
         public bool? Active { get; set; }
         public string? Address { get; set; }
 
@@ -67,7 +69,14 @@ namespace Core.CoreClass
 
         [NotMapped]
         public List<City> CityList { get; set; }
-    }
+        public List<LawyerTypesClass> LawyerTypeList { get; set; }
+
+        public class LawyerTypesClass
+        {
+			public int? UserType { get; set; }
+			public string? UserTypeName { get; set; }
+		}
+	}
 
 
 }

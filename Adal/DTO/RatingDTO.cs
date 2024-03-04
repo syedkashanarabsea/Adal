@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Core.CoreClass
 {
-    public class CasePaymentMapping
+    public class RatingDTO
     {
         public int Id { get; set; }
-        public int ClientId { get; set; }
         public int LawyerId { get; set; }
+        public int ClientId { get; set; }
         public int CaseId { get; set; }
-        public int ReceivePayment { get; set; }
-        public DateTime ReceivePaymentDate { get; set; }
+        public int? Rate { get; set; }
+        public string Comments { get; set; }
+        public DateTime CreatedOnUTC { get; set; }
     }
 }

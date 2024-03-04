@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Core.CoreClass
 {
-    public class LawyerTypes
+    public class LawyerCategoryMappingDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int RegistrationFees { get; set; }
+        public int UserId { get; set; }
+        public int CategoryId { get; set; }
     }
 }

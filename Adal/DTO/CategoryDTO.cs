@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Core.CoreClass
 {
-    public class LawyerTypes
+    public class CategoryDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int RegistrationFees { get; set; }
+        public string? Name { get; set; }
     }
 }

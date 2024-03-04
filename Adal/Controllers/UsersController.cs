@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Adal.DbContexts;
 using Core.CoreClass;
 using Adal.Models;
+using Adal.Utilities;
 
 namespace Adal.Controllers
 {
@@ -23,37 +24,40 @@ namespace Adal.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-                
-                //_context.Users != null ? 
-                //          View(await _context.Users.ToListAsync()) :
-                //          Problem("Entity set 'DatabaseContext.Users'  is null.");
-
             var getUsers = await _context.Users.ToListAsync();
 
+            //_context.Users != null ? 
+            //          View(await _context.Users.ToListAsync()) :
+            //          Problem("Entity set 'DatabaseContext.Users'  is null.");
+
+            var usersDTOList = new List<UsersDTO>();
             if (getUsers != null)
             {
-
                 var getCity = _context.City.ToList();
+                var utilities = new UtilitiesClass<Users, UsersDTO>();
+                foreach (var item in getUsers)
+                {
+                    utilities.CreateMap(); 
+                    var usersDTO = utilities.Map(item);
 
-                    getUsers.ForEach(x=>
+                    if (item.UserRoleId == 1)
                     {
-                        if (x.UserRoleId == 1)
-                        {
-                            x.UserRoleName = "admin";
-                        }
-                        if (getCity.FirstOrDefault(z=>z.Id == x.CityId) != null)
-                        {
-                            x.CityName = getCity.FirstOrDefault(z => z.Id == x.CityId).Name;
-                        }
+                        usersDTO.UserRoleName = "Admin";
                     }
-                );
-
-                return View(getUsers);
+                    if (getCity.FirstOrDefault(z => z.Id == item.CityId) != null)
+                    {
+                        usersDTO.CityName = getCity.FirstOrDefault(z => z.Id == item.CityId).Name;
+                    }
+                    usersDTOList.Add(usersDTO);
+                }
+                return View(usersDTOList);
             }
 
-            return View(new List<Users>()) ;
+            return View(new List<UsersDTO>()) ;
         }
 
+
+        #region Clints Working
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -75,13 +79,15 @@ namespace Adal.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            Users model = new Users();
+            UsersDTO model = new UsersDTO();
 
             var getCity = _context.City.ToList();
 
             model.CityList.AddRange(getCity);
 
-            return View(model);
+			model.LawyerTypeList.Add(new UsersDTO.LawyerTypesClass { UserType = 1, UserTypeName = "Standard" });
+			model.LawyerTypeList.Add(new UsersDTO.LawyerTypesClass { UserType = 2, UserTypeName = "Premium" });
+			return View(model);
         }
 
         [HttpPost]
@@ -192,5 +198,25 @@ namespace Adal.Controllers
         {
           return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        #endregion
+
+
+        #region Lawyer 
+
+
+        public IActionResult Register()
+        {
+            UsersDTO model = new UsersDTO();
+
+            var getCity = _context.City.ToList();
+
+            model.CityList.AddRange(getCity);
+            model.UserRoleId = 2;
+
+            return View(model);
+        }
+
+        #endregion
     }
 }

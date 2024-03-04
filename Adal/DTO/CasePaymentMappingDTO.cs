@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.CoreClass
 {
-    public class CasePaymentMapping
+    public class CasePaymentMappingDTO
     {
         public int Id { get; set; }
         public int ClientId { get; set; }
