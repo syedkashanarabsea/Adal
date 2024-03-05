@@ -26,18 +26,18 @@ namespace Adal.Controllers
         {
             var getUsers = await _context.Users.ToListAsync();
 
-            //_context.Users != null ? 
-            //          View(await _context.Users.ToListAsync()) :
-            //          Problem("Entity set 'DatabaseContext.Users'  is null.");
-
             var usersDTOList = new List<UsersDTO>();
+
             if (getUsers != null)
             {
                 var getCity = _context.City.ToList();
                 var utilities = new UtilitiesClass<Users, UsersDTO>();
+
+                // Call CreateMapWithAutoProperties to automatically include all properties in the mapping
+                //utilities.CreateMapWithAutoProperties();
+
                 foreach (var item in getUsers)
                 {
-                    utilities.CreateMap(); 
                     var usersDTO = utilities.Map(item);
 
                     if (item.UserRoleId == 1)
@@ -53,9 +53,8 @@ namespace Adal.Controllers
                 return View(usersDTOList);
             }
 
-            return View(new List<UsersDTO>()) ;
+            return View(new List<UsersDTO>());
         }
-
 
         #region Clints Working
         // GET: Users/Details/5
@@ -83,16 +82,19 @@ namespace Adal.Controllers
 
             var getCity = _context.City.ToList();
 
-            model.CityList.AddRange(getCity);
+			foreach (var item in getCity)
+			{
+				model.CityList.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Name });
+			}
 
-			model.LawyerTypeList.Add(new UsersDTO.LawyerTypesClass { UserType = 1, UserTypeName = "Standard" });
-			model.LawyerTypeList.Add(new UsersDTO.LawyerTypesClass { UserType = 2, UserTypeName = "Premium" });
+			model.UserRoleId = 3;
+
 			return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Users users)
+        public async Task<IActionResult> Create(UsersDTO users)
         {
             if (ModelState.IsValid)
             {
@@ -102,8 +104,13 @@ namespace Adal.Controllers
             }
 
             var getCity = _context.City.ToList();
-            users.CityList.AddRange(getCity);
-            return View(users);
+        
+			foreach (var item in getCity)
+			{
+				users.CityList.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Name });
+			}
+
+			return View(users);
         }
 
         // GET: Users/Edit/5
@@ -115,11 +122,26 @@ namespace Adal.Controllers
             }
 
             var users = await _context.Users.FindAsync(id);
-            if (users == null)
+
+			if (users != null)
             {
-                return NotFound();
+				var getCity = _context.City.ToList();
+
+				var utilities = new UtilitiesClass<Users, UsersDTO>();
+				var usersDTO = utilities.Map(users);
+
+                foreach (var item in getCity)
+                {
+                    usersDTO.CityList.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Name, Selected = item.Id == users.CityId });
+				}
+				usersDTO.LawyerTypeList.Add(new SelectListItem { Value = "1", Text = "Standard" });
+				usersDTO.LawyerTypeList.Add(new SelectListItem { Value = "2", Text = "Premium" });
+
+
+				return View(usersDTO);
+
             }
-            return View(users);
+			return NotFound();
         }
 
         // POST: Users/Edit/5
@@ -127,7 +149,7 @@ namespace Adal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Users users)
+        public async Task<IActionResult> Edit(int id, UsersDTO users)
         {
             if (id != users.Id)
             {
@@ -211,12 +233,38 @@ namespace Adal.Controllers
 
             var getCity = _context.City.ToList();
 
-            model.CityList.AddRange(getCity);
-            model.UserRoleId = 2;
+			foreach (var item in getCity)
+			{
+				model.CityList.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Name});
+			}
+			model.LawyerTypeList.Add(new SelectListItem { Value = "1", Text = "Standard" });
+			model.LawyerTypeList.Add(new SelectListItem { Value = "2", Text = "Premium" });
 
-            return View(model);
+			return View(model);
         }
 
-        #endregion
-    }
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Register(UsersDTO users)
+		{
+			if (ModelState.IsValid)
+			{
+				_context.Add(users);
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
+
+			var getCity = _context.City.ToList();
+
+			foreach (var item in getCity)
+			{
+				users.CityList.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Name });
+			}
+			return View(users);
+		}
+
+
+		#endregion
+	}
 }
